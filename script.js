@@ -1,27 +1,44 @@
 const userForm = document.querySelector("#user_form")
 const forum = document.querySelector('#forum')
+const alertMsg = document.querySelector('.alert')
 console.log(userForm)
 console.dir(userForm)
+fetch('http://user08.test1.seschool.ru:3000/api/ov4/').then(response => {
+    if (response.ok) return response.json()
+}).then(messsages => {
+    console.log(messsages)
+})
 
 userForm.addEventListener('submit', function (event) {
     event.preventDefault()
     const formData = new FormData(userForm)
+    if (!(userForm[0].value && userForm[1].value && userForm[2].value)) {
+        const errorMsg = (userForm[0].value ? '' : 'Введите имя<br>') + 
+            (userForm[1].value ? '' : 'Введите email<br>') +
+            (userForm[2].value ? '' : 'Введите сообщение<br>')
+        alertMsg.innerHTML = errorMsg
+        // alertMsg.style.display = 'block'
+        alertMsg.classList.add('show')
+        return
+    }
+
+    alertMsg.innerHTML = ''
+    // alertMsg.style.display = 'none'
+    alertMsg.classList.remove('show')
+
     const userMessage = {
         userName: userForm[0].value,
         userEmail: formData.get('user_email'),
         userMessage: formData.get('user_message')
     }
-    // formData.set('user_name', '')
-    // formData.set('user_email', '')
-    // formData.set('user_message', '')
     userForm[0].value = ''
     userForm[1].value = ''
     userForm[2].value = ''
 
-    forum.innerHTML += `<div>
+    forum.insertAdjacentHTML('afterbegin', `<li class="list-group-item">
         <span>${userMessage.userName}: </span>
         <span>${userMessage.userMessage}</span>
-    </div>`
+    </li>`)
 })
 
 
