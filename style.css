@@ -1,3 +1,7 @@
+html {
+    font-size: 12px;
+}
+
 .form-group-custom {
     /* mb.5rem */
     margin-bottom: 0.5rem;
@@ -20,12 +24,12 @@
 }
 
 .alert {
-    transition: all .5s;
-    opacity: 0;
-    /* display: none; */
+    /* transition: all .5s; */
+    /* opacity: 0; */
+    display: none;
 }
 
 .alert.show {
-    opacity: 1;
-    /* display: block; */
+    /* opacity: 1; */
+    display: block;
 }

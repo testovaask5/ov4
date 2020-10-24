@@ -1,13 +1,71 @@
-const userForm = document.querySelector("#user_form")
 const forum = document.querySelector('#forum')
 const alertMsg = document.querySelector('.alert')
-console.log(userForm)
-console.dir(userForm)
-fetch('http://user08.test1.seschool.ru:3000/api/ov4/').then(response => {
-    if (response.ok) return response.json()
-}).then(messsages => {
-    console.log(messsages)
+
+const getMessagesBtn = document.getElementById('get-chat-messages')
+
+fetch('http://user08.test1.seschool.ru:3000/api/chat/').then((response) => {
+    if (response.ok) {
+        return response.json()
+    }
+}).then((messages) => {
+    let resultHtml = ''
+    messages.forEach((message) => {
+        resultHtml += `<li class="list-group-item">${message.username}: ${message.message}</li>`
+    });
+    forum.innerHTML = resultHtml
 })
+
+const evtSource = new EventSource("http://user08.test1.seschool.ru:3000/api/chat/subscribe");
+evtSource.onmessage = function (event) {
+    const newElement = document.createElement("li");
+    newElement.classList.add("list-group-item")
+    const data = JSON.parse(event.data)
+    newElement.innerHTML = `${data.username}: ${data.message}`
+    forum.insertBefore(newElement, forum.firstElementChild);
+}
+
+const postMessageBtn = document.getElementById('post-chat-message')
+const userForm = document.querySelector("#user_form")
+const postMessage = () => {
+    const username = userForm[0].value
+    const email = userForm[1].value
+    const message = userForm[2].value
+    // debugger
+    fetch('http://user08.test1.seschool.ru:3000/api/chat/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'bearer TOKEN'
+        },
+        body: JSON.stringify({
+            username,
+            email,
+            message: message
+        })
+    }).then(response => {
+        if (response.ok) {
+            return response.json()
+        } else {
+            throw new Error(`Status: ${response.status}. Message: ${response.statusText}`)
+        }
+    }).then(response => {
+        alertMsg.classList.remove('show')
+        alertMsg.textContent = ''
+        console.log(response)
+        userForm[2].value = ''
+    }).catch(err => {
+        console.error(err)
+        alertMsg.classList.add('show')
+        alertMsg.textContent = err
+    })
+}
+
+
+// fetch('http://user08.test1.seschool.ru:3000/api/chat/').then(response => {
+//     if (response.ok) return response.json()
+// }).then(messsages => {
+//     console.log(messsages)
+// })
 
 userForm.addEventListener('submit', function (event) {
     event.preventDefault()
@@ -21,24 +79,26 @@ userForm.addEventListener('submit', function (event) {
         alertMsg.classList.add('show')
         return
     }
+    postMessage()
 
-    alertMsg.innerHTML = ''
-    // alertMsg.style.display = 'none'
-    alertMsg.classList.remove('show')
 
-    const userMessage = {
-        userName: userForm[0].value,
-        userEmail: formData.get('user_email'),
-        userMessage: formData.get('user_message')
-    }
-    userForm[0].value = ''
-    userForm[1].value = ''
-    userForm[2].value = ''
+    // alertMsg.innerHTML = ''
+    // // alertMsg.style.display = 'none'
+    // alertMsg.classList.remove('show')
 
-    forum.insertAdjacentHTML('afterbegin', `<li class="list-group-item">
-        <span>${userMessage.userName}: </span>
-        <span>${userMessage.userMessage}</span>
-    </li>`)
+    // const userMessage = {
+    //     userName: userForm[0].value,
+    //     userEmail: formData.get('user_email'),
+    //     userMessage: formData.get('user_message')
+    // }
+    // userForm[0].value = ''
+    // userForm[1].value = ''
+    // userForm[2].value = ''
+
+    // forum.insertAdjacentHTML('afterbegin', `<li class="list-group-item">
+    //     <span>${userMessage.userName}: </span>
+    //     <span>${userMessage.userMessage}</span>
+    // </li>`)
 })
 
 
