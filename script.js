@@ -1,7 +1,7 @@
 const forum = document.querySelector('#forum')
 const alertMsg = document.querySelector('.alert')
 
-const getMessagesBtn = document.getElementById('get-chat-messages')
+// const getMessagesBtn = document.getElementById('get-chat-messages')
 
 fetch('http://user08.test1.seschool.ru:3000/api/chat/').then((response) => {
     if (response.ok) {
@@ -35,7 +35,7 @@ const postMessage = () => {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'bearer TOKEN'
+            'Authorization': 'bearer tpSFqiCtPEJPqDxyOvQ3'
         },
         body: JSON.stringify({
             username,
@@ -70,35 +70,16 @@ const postMessage = () => {
 userForm.addEventListener('submit', function (event) {
     event.preventDefault()
     const formData = new FormData(userForm)
-    if (!(userForm[0].value && userForm[1].value && userForm[2].value)) {
-        const errorMsg = (userForm[0].value ? '' : 'Введите имя<br>') + 
-            (userForm[1].value ? '' : 'Введите email<br>') +
-            (userForm[2].value ? '' : 'Введите сообщение<br>')
-        alertMsg.innerHTML = errorMsg
-        // alertMsg.style.display = 'block'
-        alertMsg.classList.add('show')
-        return
-    }
-    postMessage()
-
-
-    // alertMsg.innerHTML = ''
-    // // alertMsg.style.display = 'none'
-    // alertMsg.classList.remove('show')
-
-    // const userMessage = {
-    //     userName: userForm[0].value,
-    //     userEmail: formData.get('user_email'),
-    //     userMessage: formData.get('user_message')
+    // if (!(userForm[0].value && userForm[1].value && userForm[2].value)) {
+    //     const errorMsg = (userForm[0].value ? '' : 'Введите имя<br>') + 
+    //         (userForm[1].value ? '' : 'Введите email<br>') +
+    //         (userForm[2].value ? '' : 'Введите сообщение<br>')
+    //     alertMsg.innerHTML = errorMsg
+    //     // alertMsg.style.display = 'block'
+    //     alertMsg.classList.add('show')
+    //     return
     // }
-    // userForm[0].value = ''
-    // userForm[1].value = ''
-    // userForm[2].value = ''
-
-    // forum.insertAdjacentHTML('afterbegin', `<li class="list-group-item">
-    //     <span>${userMessage.userName}: </span>
-    //     <span>${userMessage.userMessage}</span>
-    // </li>`)
+    postMessage()
 })
 
 

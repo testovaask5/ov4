@@ -13,9 +13,8 @@ html {
 }
 
 .form-group-custom .form-control {
-    /* h1.8rem */
-    height: 1.8rem;
-    padding-top: .2rem;
+    height:1.8rem;
+    padding-top:.2rem
 }
 
 #user_form {
@@ -32,4 +31,13 @@ html {
 .alert.show {
     /* opacity: 1; */
     display: block;
+}
+
+.coub {
+    width: 200px;
+    height: 200px;
+    border: 2px solid black;
+    display: inline-block;
+    background-color: red;
+    border-radius: 10px;
 }
