@@ -13,6 +13,26 @@ fetch('http://user08.test1.seschool.ru:3000/api/chat/').then((response) => {
         resultHtml += `<li class="list-group-item">${message.username}: ${message.message}</li>`
     });
     forum.innerHTML = resultHtml
+}).then(() => {
+    const messageList = [...document.querySelectorAll('.list-group-item')]
+    // const helloArray = []
+
+    // for (const messageEl of messageList) {
+    //     if (messageEl.textContent.indexOf('Hello') > -1) {
+    //         helloArray.push(messageEl)
+    //     }
+    // }
+    // messageList.forEach((messageEl) => {
+    //     if (messageEl.textContent.indexOf('Hello') > -1) {
+    //         helloArray.push(messageEl)
+    //     }
+    // })
+    const helloArray = messageList.filter((messageEl) => {
+        const result = (messageEl.textContent.indexOf('Hello') > -1)
+        return result
+    })
+
+    console.log(helloArray)
 })
 
 const evtSource = new EventSource("http://user08.test1.seschool.ru:3000/api/chat/subscribe");
@@ -35,7 +55,7 @@ const postMessage = () => {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'bearer tpSFqiCtPEJPqDxyOvQ3'
+            'Authorization': 'bearer TOKEN'
         },
         body: JSON.stringify({
             username,
